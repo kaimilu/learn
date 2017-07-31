@@ -1,0 +1,22 @@
+{
+  "name": "learn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github-kaimilu:kaimilu/learn.git"
+  },
+  "author": "laosu",
+  "license": "MIT",
+  "devDependencies": {
+    "vue": "^2.4.2",
+    "vue-loader": "^13.0.2",
+    "webpack": "^3.4.1",
+    "webpack-dev-middleware": "^1.11.0",
+    "webpack-hot-middleware": "^2.18.2"
+  }
+}
