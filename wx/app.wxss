@@ -1,0 +1,7 @@
+text {
+    font-family: MicroSoft YaHei;
+}
+
+.slide-image {
+    width: 100%;
+}
