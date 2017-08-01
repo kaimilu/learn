@@ -8,25 +8,24 @@
     </swiper>
 
     <view class="user-container">
-        
-        <view class="user-list" wx:for="{{userList}}">
-            <image src="/images/logo.jpg"></image>
-            <view class="user-info">
-                <view class="item">
-                    <text>{{userName}}</text>
-                    <text>{{juli}}</text>
-                </view>
-                <view class="item">
-                    <text>{{live}}</text>
-                    <text class="pink">{{yz}}</text>
-                    <text class="oringe">{{js}}</text>
-                </view>
-                <view class="item">
-                    <text>{{desc}}</text>
+        <block wx:for="{{user_list}}" wx:for-item="item" wx:for-index="idx">
+            <view class="user-list">
+                <image src="/images/logo.jpg"></image>
+                <view class="user-info">
+                    <view class="item">
+                        <text>{{item.userName}} No.{{idx+1}}</text>
+                        <text>{{item.juli}}</text>
+                    </view>
+                    <view class="item">
+                        <text>{{item.live}}</text>
+                        <text class="pink">{{item.yz}}</text>
+                        <text class="oringe">{{item.js}}</text>
+                    </view>
+                    <view class="item">
+                        <text>{{item.desc}}</text>
+                    </view>
                 </view>
             </view>
-        </view>
-     
-        
+        </block>          
     </view>
 </view>

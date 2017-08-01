@@ -1,7 +1,7 @@
 {
     "pages": [
-        "pages/userList/userList",
-        "pages/loading/loading"
+        "pages/loading/loading",
+        "pages/userList/userList"       
     ],
     "window": {
         "navigationBarBackgroundColor": "#b3d4db",

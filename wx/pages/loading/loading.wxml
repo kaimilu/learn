@@ -1,7 +1,7 @@
 <view class="container">
     <image class="user-avatar" src="/images/logo.jpg"></image>
     <text class="user-name" data-title="MM 根据地">老苏测试</text>
-    <view class="moto-container">
-          <text class="moto">为心动而生</text>
+    <view class="moto-container" bindtap="onBegin">
+          <text class="moto" catchtap="onTextTap">为心动而生</text>
     </view>
 </view>
