@@ -36,7 +36,7 @@ class LBSWX {
     }
 
     /**
-     * 云检索LBS
+     * 云检索LBS POI周边检索
      * 
      * @param {any} param 检索配置
      * 参数对象结构可以参考
