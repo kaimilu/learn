@@ -1,0 +1,19 @@
+<template name="userlist">
+    <view class="user-list">
+        <image src="/images/logo.jpg"></image>
+        <view class="user-info">
+            <view class="item">
+                <text>{{userName}} No.{{index}}</text>
+                <text>{{juli}}</text>
+            </view>
+            <view class="item">
+                <text>{{live}}</text>
+                <text class="pink">{{yz}}</text>
+                <text class="oringe">{{js}}</text>
+            </view>
+            <view class="item">
+                <text>{{desc}}</text>
+            </view>
+        </view>
+    </view>
+</template>

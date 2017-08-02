@@ -1,3 +1,4 @@
+var userData = require('../../data/userlist.js');
 Page({
 
     /**
@@ -12,85 +13,25 @@ Page({
         // 是否显示面板指示点
         indicatorDots: true,
         // 是否自动切换
-        autoplay: true,
+        autoplay: false,
         // 自动切换时间间隔
         interval: 3000,
         // 滑动动画时长
         duration: 1000
     },
-
-    /**
-     * 生命周期函数--监听页面加载
-     */
-    onLoad: function(options) {
-
-    },
-
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady: function() {
-        var userList = [{
-            "userName": "老苏",
-            "juli": "1km",
-            "live": "Lv.5",
-            "yz": "已验证",
-            "js": "男神",
-            "desc": "比比纟比比"
-        },{
-           "userName": "老苏1",
-            "juli": "1km",
-            "live": "Lv.5",
-            "yz": "已验证",
-            "js": "男神",
-            "desc": "比比纟比比" 
-        }]
+
         this.setData({
-            user_list:userList
+            user_list: userData.userList
         })
-    },
 
-    /**
-     * 生命周期函数--监听页面显示
-     */
-    onShow: function() {
 
     },
 
-    /**
-     * 生命周期函数--监听页面隐藏
-     */
-    onHide: function() {
 
-    },
-
-    /**
-     * 生命周期函数--监听页面卸载
-     */
-    onUnload: function() {
-
-    },
-
-    /**
-     * 页面相关事件处理函数--监听用户下拉动作
-     */
-    onPullDownRefresh: function() {
-
-    },
-
-    /**
-     * 页面上拉触底事件的处理函数
-     */
-    onReachBottom: function() {
-
-    },
-
-    /**
-     * 用户点击右上角分享
-     */
-    onShareAppMessage: function() {
-
-    },
 
     changeIndicatorDots: function(e) {
         this.setData({

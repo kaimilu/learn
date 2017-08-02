@@ -1,7 +1,9 @@
 {
     "pages": [
+        "pages/test/test",
+        "pages/index/index",
         "pages/loading/loading",
-        "pages/userList/userList"       
+        "pages/userList/userList"
     ],
     "window": {
         "navigationBarBackgroundColor": "#b3d4db",
