@@ -1,18 +1,7 @@
-/**
- * @file 微信小程序JSAPI
- * @author 崔健 cuijian03@baidu.com 2017.01.10
- */
-
-/**
- * 云检索LBS.云 小程序API类
- * 
- * @class LBSWX
- */
 class LBSWX {
     constructor(param) {
         this.ak = param["ak"]
     }
-
 
     /**
      * 使用微信接口进行定位
@@ -36,28 +25,64 @@ class LBSWX {
     }
 
     /**
-     * 云检索LBS POI周边检索
      * 
-     * @param {any} param 检索配置
-     * 参数对象结构可以参考
-     * http://lbsyun.baidu.com/index.php?title=lbscloud/api/geosearch
-     * @memberof LBSWX
      */
     search(param) {
         var that = this;
         param = param || {};
-        /**
-         * ak	access_key	string(50)	字符串	必须
-            geotable_id	geotable主键	uint32	数字	必须
-            q	检索关键字	string(45)	任意汉字或数字，英文字母，可以为空字符	可选
-            location	检索的中心点	string(25)	逗号分隔的经纬度	必须
-            样例：116.4321,38.76623
-         */
-        let serachparam = {
-            q: param["query"] || '',
-            ak: that.ak
+        let searchparam = {
+            ak: that.ak,
+            output: param["output"] || 'json',
+            radius: param["radius"] || 10000,
+            tags: param["tags"] || 'mm',
+            geotable_id: param["geotable_id"] || "165117",
+            sortby: "distance:1"
+        }
+        let otherparam = {
+            success: param["success"] || function() {},
+            fail: param["fail"] || function() {}
+        }
+        let type = 'gcj02';
+        let locationsuccess = function(result) {
+            searchparam["location"] = result["latitude"] + ',' + result["longitude"];
+            console.log(searchparam["location"])
+            wx.request({
+                url: 'http://m174382l91.iask.in/baidu/lbsData',
+                data: searchparam,
+                header: {
+                    "content-type": "application/json"
+                },
+                method: 'GET',
+                success(data) {
+                    let res = data["data"]
+                    console.log(res);
+                },
+                fail(data) {
+                    otherparam.fail(data);
+                }
+            })
+        }
+        let locationfail = function(result) {
+            otherparam.fail(result);
+        };
+        let locationcomplete = function(result) {};
+        if (!param["location"]) {
+            console.log(1);
+            that.getWXLocation(type, locationsuccess, locationfail, locationcomplete);
+        } else {
+            console.log(2)
+            let longitude = param.location.split(',')[1];
+            let latitude = param.location.split(',')[0];
+            console.log(latitude + '====' + longitude)
+            let errMsg = 'input location';
+            let res = {
+                errMsg: errMsg,
+                latitude: latitude,
+                longitude: longitude
+            };
+            locationsuccess(res);
         }
     }
 }
 
-module.export.LBSWX = LBSWX;
+module.exports.LBSWX = LBSWX;

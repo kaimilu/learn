@@ -1,4 +1,16 @@
 // 引用百度地图微信小程序JSAPI模块 
+/**
+ * latitude:22.536342639594
+ * longitude:114.05694988501
+ * 
+ *          22.546562069184
+ * latitude  113.94766618049
+:
+22.536342639594
+longitude
+:
+114.05694988501
+ */
 var bmap = require('../../libs/bmap-wx.js');
 var wxMarkerData = [];
 Page({
@@ -18,7 +30,7 @@ Page({
         var that = this;
         // 新建百度地图对象 
         var BMap = new bmap.BMapWX({
-            ak: ''
+            ak: '2zIvvS40mt0lMzxipXoQCth6t9RwCTWN'
         });
         var fail = function(data) {
             console.log(data)
@@ -37,7 +49,7 @@ Page({
             }
             // 发起POI检索请求 
         BMap.search({
-            "query": '中关村',
+            "query": '酒店',
             fail: fail,
             success: success,
             // 此处需要在相应路径放置图片文件 
@@ -45,21 +57,6 @@ Page({
             // 此处需要在相应路径放置图片文件 
             iconTapPath: '../../img/marker_red.png'
         });
-        let searchparam = {
-
-        }
-        wx.getLocation({
-            type: 'wgs84',
-            success: function(res) {
-                var latitude = res.latitude
-                var longitude = res.longitude
-                var speed = res.speed
-                var accuracy = res.accuracy
-
-                console.log(latitude + '=====' + longitude)
-            }
-        })
-
     },
     showSearchInfo: function(data, i) {
         var that = this;

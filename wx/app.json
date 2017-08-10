@@ -1,8 +1,8 @@
 {
     "pages": [
+        "pages/loading/loading",
         "pages/index/index",
         "pages/test/test",
-        "pages/loading/loading",
         "pages/userList/userList"
     ],
     "window": {

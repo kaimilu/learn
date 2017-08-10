@@ -29,14 +29,14 @@ class BMapWX {
      */
     getWXLocation(type, success, fail, complete) {
         type = type || 'gcj02',
-        success = success || function () {};
-        fail = fail || function () {};
-        complete = complete || function () {};
+            success = success || function() {};
+        fail = fail || function() {};
+        complete = complete || function() {};
         wx.getLocation({
             type: type,
             success: success,
             fail: fail,
-            complete:complete
+            complete: complete
         });
     }
 
@@ -70,11 +70,11 @@ class BMapWX {
             width: param["width"],
             height: param["height"],
             alpha: param["alpha"] || 1,
-            success: param["success"] || function () {},
-            fail: param["fail"] || function () {}
+            success: param["success"] || function() {},
+            fail: param["fail"] || function() {}
         };
         let type = 'gcj02';
-        let locationsuccess = function (result) {
+        let locationsuccess = function(result) {
             searchparam["location"] = result["latitude"] + ',' + result["longitude"];
             wx.request({
                 url: 'https://api.map.baidu.com/place/v2/search',
@@ -106,7 +106,7 @@ class BMapWX {
                                 alpha: otherparam["alpha"],
                                 width: otherparam["width"],
                                 height: otherparam["height"]
-                            } 
+                            }
                         }
                         otherparam.success(outputRes);
                     } else {
@@ -121,11 +121,10 @@ class BMapWX {
                 }
             });
         }
-        let locationfail = function (result) {
+        let locationfail = function(result) {
             otherparam.fail(result);
         };
-        let locationcomplete = function (result) {
-        };
+        let locationcomplete = function(result) {};
         if (!param["location"]) {
             that.getWXLocation(type, locationsuccess, locationfail, locationcomplete);
         } else {
@@ -162,8 +161,8 @@ class BMapWX {
             ret_coordtype: 'gcj02ll'
         };
         let otherparam = {
-            success: param["success"] || function () {},
-            fail: param["fail"] || function () {}
+            success: param["success"] || function() {},
+            fail: param["fail"] || function() {}
         };
         wx.request({
             url: 'https://api.map.baidu.com/place/v2/suggestion',
@@ -214,11 +213,11 @@ class BMapWX {
             width: param["width"],
             height: param["height"],
             alpha: param["alpha"] || 1,
-            success: param["success"] || function () {},
-            fail: param["fail"] || function () {}
+            success: param["success"] || function() {},
+            fail: param["fail"] || function() {}
         };
         let type = 'gcj02';
-        let locationsuccess = function (result) {
+        let locationsuccess = function(result) {
             regeocodingparam["location"] = result["latitude"] + ',' + result["longitude"];
             wx.request({
                 url: 'https://api.map.baidu.com/geocoder/v2/',
@@ -236,7 +235,7 @@ class BMapWX {
                         // wxMarkerData为小程序规范的marker格式
                         let outputRes = {};
                         outputRes["originalData"] = res;
-                        outputRes["wxMarkerData"] = [];    
+                        outputRes["wxMarkerData"] = [];
                         outputRes["wxMarkerData"][0] = {
                             id: 0,
                             latitude: result["latitude"],
@@ -263,11 +262,10 @@ class BMapWX {
                 }
             });
         };
-        let locationfail = function (result) {
+        let locationfail = function(result) {
             otherparam.fail(result);
         }
-        let locationcomplete = function (result) {
-        };
+        let locationcomplete = function(result) {};
         if (!param["location"]) {
             that.getWXLocation(type, locationsuccess, locationfail, locationcomplete);
         } else {
@@ -299,11 +297,11 @@ class BMapWX {
             timestamp: param["timestamp"] || ''
         };
         let otherparam = {
-            success: param["success"] || function () {},
-            fail: param["fail"] || function () {}
+            success: param["success"] || function() {},
+            fail: param["fail"] || function() {}
         };
         let type = 'gcj02';
-        let locationsuccess = function (result) {
+        let locationsuccess = function(result) {
             weatherparam["location"] = result["longitude"] + ',' + result["latitude"];
             wx.request({
                 url: 'https://api.map.baidu.com/telematics/v3/weather',
@@ -321,7 +319,7 @@ class BMapWX {
                         // wxMarkerData为小程序规范的marker格式
                         let outputRes = {};
                         outputRes["originalData"] = res;
-                        outputRes["currentWeather"] = [];    
+                        outputRes["currentWeather"] = [];
                         outputRes["currentWeather"][0] = {
                             currentCity: weatherArr[0]["currentCity"],
                             pm25: weatherArr[0]["pm25"],
@@ -343,11 +341,10 @@ class BMapWX {
                 }
             });
         }
-        let locationfail = function (result) {
+        let locationfail = function(result) {
             otherparam.fail(result);
         }
-        let locationcomplete = function (result) {
-        }
+        let locationcomplete = function(result) {}
         if (!param["location"]) {
             that.getWXLocation(type, locationsuccess, locationfail, locationcomplete);
         } else {

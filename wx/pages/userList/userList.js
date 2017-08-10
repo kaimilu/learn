@@ -1,4 +1,5 @@
 var userData = require('../../data/userlist.js');
+var lbsWx = require('../../libs/lbs-wx.js')
 Page({
 
     /**
@@ -31,6 +32,35 @@ Page({
 
     },
 
+    onLoad: function() {
+        var that = this;
+        var LBSwx = new lbsWx.LBSWX({
+            ak: 'ljXs5Tq8SGuEffMsAYZglcEjgCGgiCRW'
+        })
+        var fail = function(data) {
+            console.log(data);
+        };
+        var success = function(data) {
+            console.log(data)
+        };
+        // wx.request({
+        //         url: 'http://m174382l91.iask.in/baidu/lbsData',
+        //         header: {
+        //             "content-type": "application/json"
+        //         },
+        //         method: 'GET',
+        //         success(data) {
+        //             console.log(data)
+        //         }
+        //     })
+        // 发起LBS检索请求
+        LBSwx.search({
+            tags: "mm",
+            fail: fail,
+            success: success,
+            location: "113.94766618049,22.546562069184"
+        })
+    },
 
 
     changeIndicatorDots: function(e) {

@@ -1,16 +1,25 @@
 {
-  "name": "wx-server",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "laosu",
-  "license": "ISC",
-  "devDependencies": {
-    "kcors": "^2.2.1",
-    "koa": "^2.3.0",
-    "koa-router": "^7.2.1"
-  }
+    "name": "wx-server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node ./bin/www"
+    },
+    "author": "laosu",
+    "license": "ISC",
+    "devDependencies": {
+        "body-parser": "^1.17.2",
+        "cookie-parser": "^1.4.3",
+        "express": "^4.15.4",
+        "kcors": "^2.2.1",
+        "koa": "^2.3.0",
+        "koa-router": "^7.2.1",
+        "morgan": "^1.8.2",
+        "debug": "~2.2.0",
+        "serve-favicon": "~2.3.0",
+        "superagent": "^3.5.2"
+
+    }
 }
