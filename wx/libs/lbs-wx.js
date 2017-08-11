@@ -34,7 +34,7 @@ class LBSWX {
             ak: that.ak,
             output: param["output"] || 'json',
             radius: param["radius"] || 10000,
-            tags: param["tags"] || 'mm',
+            q: param["tags"] || 'mm',
             geotable_id: param["geotable_id"] || "165117",
             sortby: "distance:1"
         }
@@ -54,8 +54,20 @@ class LBSWX {
                 },
                 method: 'GET',
                 success(data) {
-                    let res = data["data"]
-                    console.log(res);
+                    let res = data["data"];
+                    if (res["status"] === 0) {
+                        // outputRes 包含两个对象，
+                        // originalData为百度接口返回的原始数据
+                        // wxMarkerData为小程序规范的marker格式
+
+
+                        otherparam.success(res);
+                    } else {
+                        otherparam.fail({
+                            errMsg: res["message"],
+                            statusCode: res["status"]
+                        });
+                    }
                 },
                 fail(data) {
                     otherparam.fail(data);

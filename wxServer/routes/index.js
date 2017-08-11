@@ -18,4 +18,14 @@ router.get('/baidu/lbsData', function(req, res, next) {
 
 })
 
+router.get('/baidu/convertIP', function(req, res, next) {
+    request
+        .get('http://api.map.baidu.com/geoconv/v1/?')
+        .query({
+            ak: 'ljXs5Tq8SGuEffMsAYZglcEjgCGgiCRW',
+            coords: '114.21892734521,29.575429778924',
+            from: '3'
+        })
+})
+
 module.exports = router;

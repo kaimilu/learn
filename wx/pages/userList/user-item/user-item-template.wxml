@@ -1,18 +1,18 @@
 <template name="userlist">
     <view class="user-list">
-        <image src="/images/logo.jpg"></image>
+        <image src="{{avatar_url}}"></image>
         <view class="user-info">
             <view class="item">
-                <text>{{userName}} No.{{index}}</text>
-                <text>{{juli}}</text>
+                <text>{{title}}-{{district}}</text>
+                <text>{{}}</text>
             </view>
             <view class="item">
-                <text>{{live}}</text>
-                <text class="pink">{{yz}}</text>
-                <text class="oringe">{{js}}</text>
+                <text wx:if="{{label[0]}}">{{label[0]}}</text>
+                <text wx:if="{{label[1]}}" class="pink">{{label[1]}}</text>
+                <text wx:if="{{label[2]}}" class="oringe">{{label[2]}}</text>
             </view>
             <view class="item">
-                <text>{{desc}}</text>
+                <text>{{signature}}</text>
             </view>
         </view>
     </view>

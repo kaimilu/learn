@@ -1,4 +1,4 @@
-var userData = require('../../data/userlist.js');
+// var userData = require('../../data/userlist.js');
 var lbsWx = require('../../libs/lbs-wx.js')
 Page({
 
@@ -18,16 +18,20 @@ Page({
         // 自动切换时间间隔
         interval: 3000,
         // 滑动动画时长
-        duration: 1000
+        duration: 1000,
+        // 
+        latitude: '',
+        longitude: '',
+
     },
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady: function() {
 
-        this.setData({
-            user_list: userData.userList
-        })
+        // this.setData({
+        //     user_list: userData.userList
+        // })
 
 
     },
@@ -35,30 +39,45 @@ Page({
     onLoad: function() {
         var that = this;
         var LBSwx = new lbsWx.LBSWX({
-            ak: 'ljXs5Tq8SGuEffMsAYZglcEjgCGgiCRW'
+            ak: ''
         })
         var fail = function(data) {
             console.log(data);
         };
         var success = function(data) {
+            // 转换label
+            for (let item of data.contents) {
+                item.label = item.label.split(',');
+            }
+            that.setData({
+                laosu: data
+            })
             console.log(data)
         };
-        // wx.request({
-        //         url: 'http://m174382l91.iask.in/baidu/lbsData',
-        //         header: {
-        //             "content-type": "application/json"
-        //         },
-        //         method: 'GET',
-        //         success(data) {
-        //             console.log(data)
-        //         }
-        //     })
-        // 发起LBS检索请求
+
+        wx.getLocation({
+            type: 'wgs84',
+            success: function(res) {
+                var latitude = res.latitude
+                var longitude = res.longitude
+                var speed = res.speed
+                var accuracy = res.accuracy
+                console.log("==============")
+                console.log(latitude + ':' + longitude)
+                that.setData({
+                    latitude: latitude,
+                    longitude: longitude
+                })
+            }
+        })
         LBSwx.search({
-            tags: "mm",
+            tags: "搜索",
             fail: fail,
             success: success,
-            location: "113.94766618049,22.546562069184"
+            location: "113.94763969118,22.546721293351",
+            geotable_id: "164969"
+                // location: "113.94766618049,22.546562069184"
+                // location: "114.05694988501,22.536342639594"
         })
     },
 

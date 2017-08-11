@@ -9,8 +9,8 @@
     </swiper>
 
     <view class="user-container">
-        <block wx:for="{{user_list}}" wx:for-item="item"  wx:for-index="idx">
+        <block wx:for="{{laosu.contents}}" wx:for-item="item"  wx:for-index="idx">
             <template is="userlist" data="{{...item}}"></template>
-        </block>          
+        </block>           
     </view>
 </view>
