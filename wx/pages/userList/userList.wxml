@@ -1,16 +1,16 @@
 <import is="" src="user-item/user-item-template.wxml" />
 <view>
-    <swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" style="width:100%; height:400rpx">
+    <!--<swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" style="width:100%; height:400rpx">
         <block wx:for="{{imgUrls}}">
             <swiper-item>
                 <image src="{{item}}" class="slide-image" />
             </swiper-item>
         </block>
-    </swiper>
+    </swiper>-->
 
-    <view class="user-container">
+    <scroll-view scroll-y="true" scroll-x="false" bindscrolltolower="onScrollLower" class="user-container">
         <block wx:for="{{laosu.contents}}" wx:for-item="item"  wx:for-index="idx">
             <template is="userlist" data="{{...item}}"></template>
         </block>           
-    </view>
+    </scroll-view>
 </view>

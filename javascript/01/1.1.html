@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        ;
+        (function() {
+            var duck = {
+                duckSinging: function() {
+                    console.log('嘎嘎嘎')
+                }
+            }
+            var chicken = {
+                duckSinging: function() {
+                    console.log('嘎嘎嘎')
+                }
+            }
+
+            var choir = []; // 合唱团
+
+            var joinChoir = function(animal) {
+                if (animal && typeof animal.duckSinging == 'function') {
+                    choir.push(animal);
+                    console.log('恭喜加入合唱团');
+                    console.log('合唱团已有成员数量:' + choir.length);
+                }
+            }
+
+            joinChoir(duck);
+            joinChoir(chicken);
+        })('1.1 动态类型语言和鸭子类型');
+
+        ;
+        (function() {
+            var makeSound = function(animal) {
+                if (animal instanceof Duck) {
+                    console.log('嘎嘎嘎')
+                } else if (animal instanceof Chicken) {
+                    console.log('咯咯咯')
+                }
+            }
+
+            var Duck = function() {}
+            var Chicken = function() {}
+
+            makeSound(new Duck());
+            makeSound(new Chicken());
+
+        })('1.2.1 一段“多态”的JavaScript代码');
+
+        ;
+        (function() {
+            var makeSound = function(animal) {
+                animal.sound();
+            }
+
+            var Duck = function() {}
+            Duck.prototype.sound = function() {
+                console.log('嘎嘎嘎')
+            }
+            var Chicken = function() {}
+            Chicken.prototype.sound = function() {
+                console.log('咯咯咯')
+            }
+
+            makeSound(new Duck());
+            makeSound(new Chicken());
+            /**
+             * 现在我们向鸭和鸡都发出“叫唤”的消息，它们接到消息后分别作出了不同的反应。
+             * 如果有一天动物世界里又增加了一只狗，这时候只要简单地追加一些代码就可以了，
+             * 而不用改动以前的makeSound 函数，如下所示：
+             */
+            var Dog = function() {}
+            Dog.prototype.sound = function() {
+                console.log('汪汪汪')
+            }
+            makeSound(new Dog());
+        })('1.2.2 对象的多态性 P6');
+
+        ;
+        (function() {
+            /**
+             * 假设我们要编写一个地图应用，现在有两家可选的地图 API 提供商供我们接入自己的应用。
+             * 目前我们选择的是谷歌地图，谷歌地图的 API 中提供了 show 方法，负责在页面上展示整个地图。
+             * 示例代码如下：
+             */
+            var googleMap = {
+                show: function() {
+                    console.log('开始渲染谷歌地图')
+                }
+            }
+            var renderMap = function() {
+                googleMap.show();
+            }
+            renderMap();
+
+        })('1.2.6 多态在面向对象程序设计中的作用');
+
+        ;
+        (function() {
+            var googleMap = {
+                show: function() {
+                    console.log('开始渲染谷歌地图')
+                }
+            }
+            var baiduMap = {
+                show: function() {
+                    console.log('开始渲染百度地图')
+                }
+            }
+
+            var renderMap = function(type) {
+                if (type === 'google') {
+                    googleMap.show();
+                } else if (type === 'baidu') {
+                    baiduMap.show();
+                }
+            }
+            renderMap('google')
+            renderMap('baidu')
+        })();;
+        (function() {
+            /**
+             * 可以看到，虽然 renderMap 函数目前保持了一定的弹性，但这种弹性是很脆弱的，
+             * 一旦需要替换成搜搜地图，那无疑必须得改动 renderMap 函数，继续往里面堆砌条件分支语句。
+             */
+            var googleMap = {
+                show: function() {
+                    console.log('开始渲染谷歌地图')
+                }
+            }
+            var baiduMap = {
+                show: function() {
+                    console.log('开始渲染百度地图')
+                }
+            }
+
+            var renderMap = function(map) {
+                if (map.show instanceof Function) {
+                    map.show();
+                }
+            }
+
+            renderMap(googleMap);
+            renderMap(baiduMap);
+            var sosoMap = {
+                show: function() {
+                    console.log('开始渲染搜搜地图')
+                }
+            }
+            renderMap(sosoMap);
+        })();;
+        (function() {
+            /**
+             * 除了 ECMAScript 6 中提供的 let 之外，一般我们通过函数来创建作用域：
+             */
+            var myObject = (function() {
+                var __name = 'laosu';
+                return {
+                    getName: function() {
+                        return __name;
+                    }
+                }
+            })();
+            console.log(myObject.getName());
+            console.log(myObject.__name)
+        })('1.3.1 封装数据 P12');;
+        (function() {
+            /**
+             * 原型模式的实现关键，是语言本身是否提供了 clone 方法。
+             * ECMAScript 5 提供了 Object.create方法，可以用来克隆对象。代码如下：
+             */
+            var Plane = function() {
+                this.blood = 100;
+                this.attackLevel = 1;
+                this.defenseLevel = 1;
+            };
+
+            var plane = new Plane();
+            plane.blood = 500;
+            plane.attackLevel = 10;
+            plane.defenseLevel = 7;
+
+            var clonePlane = Object.create(plane);
+            console.log(clonePlane);
+
+            // 在不支持 Object.create 方法的浏览器中，则可以使用以下代码：
+            Object.create = Object.create || function(obj) {
+                var F = function() {}
+                F.prototype = o;
+                return new F();
+            }
+
+            var obj1 = new Object();
+            var obj2 = {};
+
+            // 可以利用 ECMAScript 5 提供的 Object.getPrototypeOf 来查看这两个对象的原型：
+            console.log(Object.getPrototypeOf(obj1) === Object.prototype);
+            console.log(Object.getPrototypeOf(obj2) === Object.prototype);
+
+        })('原型模式和基于原型继承的 JavaScript 对象系统');;
+        (function() {
+            function Person(name) {
+                this.name = name;
+            };
+
+            Person.prototype.getName = function() {
+                return this.name;
+            }
+
+            var a = new Person('laosu')
+
+            console.log(a.name)
+            console.log(a.getName())
+            console.log(Object.getPrototypeOf(a) === Person.prototype);
+
+        })('2. 要得到一个对象，不是通过实例化类，而是找到一个对象作为原型并克隆它 P19');;
+        (function() {
+            /**
+             * 在 Chrome 和 Firefox 等向外暴露了对象__proto__属性的浏览器下，
+             * 我们可以通过下面这段代码来理解 new 运算的过程
+             */
+            function Person(name) {
+                this.name = name;
+            };
+            Person.prototype.getName = function() {
+                return this.name;
+            };
+
+            var objectFactory = function() {
+                var obj = new Object(), // 从 Object.prototype 上克隆一个空的对象
+                    Constructor = [].shift.call(arguments); // 取得外部传入的构造器，此例是 Person
+                obj.__proto__ = Constructor.prototype; // 指向正确的原型
+                var ret = Constructor.apply(obj, arguments); // 借用外部传入的构造器给 obj 设置属性
+                return typeof ret === 'object' ? ret : obj; // 确保构造器总是会返回一个对象
+            }
+
+            var a = objectFactory(Person, 'sven');
+            console.log(a);
+            console.log(a.name);
+            console.log(a.getName());
+            console.log(Object.getPrototypeOf(a) === Person.prototype); // true
+
+        })();
+    </script>
+</body>
+
+</html>

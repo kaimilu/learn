@@ -36,7 +36,8 @@ class LBSWX {
             radius: param["radius"] || 10000,
             q: param["tags"] || 'mm',
             geotable_id: param["geotable_id"] || "165117",
-            sortby: "distance:1"
+            sortby: "distance:1",
+            page_index: param["curPage"] || 0
         }
         let otherparam = {
             success: param["success"] || function() {},
@@ -47,7 +48,7 @@ class LBSWX {
             searchparam["location"] = result["latitude"] + ',' + result["longitude"];
             console.log(searchparam["location"])
             wx.request({
-                url: 'http://m174382l91.iask.in/baidu/lbsData',
+                url: 'http://192.168.1.198:3000/baidu/lbsData',
                 data: searchparam,
                 header: {
                     "content-type": "application/json"
@@ -59,8 +60,6 @@ class LBSWX {
                         // outputRes 包含两个对象，
                         // originalData为百度接口返回的原始数据
                         // wxMarkerData为小程序规范的marker格式
-
-
                         otherparam.success(res);
                     } else {
                         otherparam.fail({
@@ -79,10 +78,8 @@ class LBSWX {
         };
         let locationcomplete = function(result) {};
         if (!param["location"]) {
-            console.log(1);
             that.getWXLocation(type, locationsuccess, locationfail, locationcomplete);
         } else {
-            console.log(2)
             let longitude = param.location.split(',')[1];
             let latitude = param.location.split(',')[0];
             console.log(latitude + '====' + longitude)
@@ -95,6 +92,64 @@ class LBSWX {
             locationsuccess(res);
         }
     }
+
+    computed(param) {
+        var that = this;
+        param = param || {};
+        let searchparam = {
+            ak: that.ak,
+            output: param["output"] || 'json',
+            destinations: param["destinations"],
+
+        }
+        let otherparam = {
+            success: param["success"] || function() {},
+            fail: param["fail"] || function() {}
+        }
+        let type = 'gcj02';
+        let locationsuccess = function(result) {
+            searchparam["origins"] = result["latitude"] + ',' + result["longitude"];
+            wx.request({
+                url: 'http://192.168.1.198:3000/baidu/computed',
+                data: searchparam,
+                header: {
+                    "content-type": "application/json"
+                },
+                success(data) {
+                    let res = data['data'];
+                    if (res["status"] === 0) {
+                        otherparam.success(res);
+                    } else {
+                        otherparam.fail({
+                            errMsg: res["message"],
+                            statusCode: res["status"]
+                        });
+                    }
+                },
+                fail(data) {
+                    otherparam.fail(data);
+                }
+            })
+        }
+        let locationfail = function(result) {
+            otherparam.fail(result);
+        };
+        let locationcomplete = function(result) {};
+        if (!param["origins"]) {
+            that.getWXLocation(type, locationsuccess, locationfail, locationcomplete);
+        } else {
+            let longitude = param.location.split(',')[1];
+            let latitude = param.location.split(',')[0];
+            let errMsg = 'input location';
+            let res = {
+                errMsg: errMsg,
+                latitude: latitude,
+                longitude: longitude
+            };
+            locationsuccess(res);
+        }
+    }
+
 }
 
 module.exports.LBSWX = LBSWX;

@@ -22,66 +22,86 @@ Page({
         // 
         latitude: '',
         longitude: '',
-
+        // 当前页码
+        curPage: 0,
+        LBSwx: null,
+        laosu: null
     },
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
     onReady: function() {
 
-        // this.setData({
-        //     user_list: userData.userList
-        // })
-
 
     },
 
     onLoad: function() {
         var that = this;
-        var LBSwx = new lbsWx.LBSWX({
-            ak: ''
+        this.data.LBSwx = new lbsWx.LBSWX({
+            ak: 'ljXs5Tq8SGuEffMsAYZglcEjgCGgiCRW'
         })
-        var fail = function(data) {
-            console.log(data);
-        };
-        var success = function(data) {
-            // 转换label
-            for (let item of data.contents) {
-                item.label = item.label.split(',');
-            }
-            that.setData({
-                laosu: data
-            })
-            console.log(data)
-        };
-
-        wx.getLocation({
-            type: 'wgs84',
-            success: function(res) {
-                var latitude = res.latitude
-                var longitude = res.longitude
-                var speed = res.speed
-                var accuracy = res.accuracy
-                console.log("==============")
-                console.log(latitude + ':' + longitude)
-                that.setData({
-                    latitude: latitude,
-                    longitude: longitude
-                })
-            }
-        })
-        LBSwx.search({
-            tags: "搜索",
-            fail: fail,
-            success: success,
-            location: "113.94763969118,22.546721293351",
-            geotable_id: "164969"
-                // location: "113.94766618049,22.546562069184"
-                // location: "114.05694988501,22.536342639594"
-        })
+        this.getData();
     },
 
+    // 获取数据
+    getData: function() {
+        var that = this;
+        that.data.LBSwx.search({
+            tags: "搜索",
+            fail: that.fail,
+            success: that.success,
+            location: "113.94763969118,22.546721293351",
+            geotable_id: "164969",
+            curPage: that.data.curPage,
+            radius: 2000000000
+        })
+        wx.showNavigationBarLoading();
+    },
+    // 处理并且绑定数据
+    success: function(data) {
+        var laosuData = null;
+        var that = this;
+        var locationArr = [];
+        for (let item of data.contents) {
+            item.label = item.label.split(',');
+            locationArr.push(item.location[1] + ',' + item.location[0])
 
+        }
+        locationArr = locationArr.join('|');
+        that.computed(locationArr);
+        laosuData = data;
+        if (this.data.laosu) {
+            laosuData.contents = this.data.laosu.contents.concat(data.contents)
+        }
+        this.setData({
+            laosu: laosuData
+        })
+        wx.hideNavigationBarLoading()
+
+    },
+    computed: function(destinations) {
+        var that = this;
+        console.log(that.data.lbsWx);
+        that.data.LBSwx.computed({
+            destinations: destinations,
+            fail: that.fail,
+            success: function(data) {
+                that.setData()
+            }
+        })
+
+    },
+    fail: function(data) {
+        console.log(data)
+    },
+    onScrollLower: function(event) {
+        if (Math.ceil(this.data.laosu.total / this.data.curPage) <= this.data.curPage) {
+            return
+        }
+        this.data.curPage++;
+        console.log(this.data.curPage)
+        this.getData();
+    },
     changeIndicatorDots: function(e) {
         this.setData({
             indicatorDots: !this.data.indicatorDots

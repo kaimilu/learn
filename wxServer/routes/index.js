@@ -24,8 +24,16 @@ router.get('/baidu/convertIP', function(req, res, next) {
         .query({
             ak: 'ljXs5Tq8SGuEffMsAYZglcEjgCGgiCRW',
             coords: '114.21892734521,29.575429778924',
-            from: '3'
+            from: '3',
+
         })
+})
+
+router.get('/baidu/computed', function(req, res, next) {
+    console.log(req.query)
+    request
+        .get('http://api.map.baidu.com/routematrix/v2/walking?')
+        .query(req.query)
 })
 
 module.exports = router;

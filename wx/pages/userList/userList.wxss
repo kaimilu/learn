@@ -1,4 +1,5 @@
 @import "user-item/user-item-template.wxss";
 .user-container {
+    height: 1300rpx;
     padding: 10rpx;
 }
