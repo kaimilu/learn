@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Canavas 绘图基础</title>
+</head>
+
+<body>
+    <canvas id="canvas">当前浏览器不支持canvase</canvas>
+
+    <script>
+        var canvas = document.querySelector('#canvas');
+        if (canvas.getContext("2d")) {
+            console.log('canvas is ok!')
+        } else {
+            alert('当前浏览器不支持canvase')
+        }
+        canvas.width = 800;
+        canvas.height = 800;
+        var context = canvas.getContext('2d');
+        // 使用context 进行绘制
+        context.moveTo(100, 100);
+        context.lineTo(700, 700);
+        context.lineWidth = 10;
+        context.strokeStyle = "#058";
+        context.stroke();
+    </script>
+</body>
+
+</html>
