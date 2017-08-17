@@ -2,7 +2,7 @@ require('babel-register')
 const Koa = require('koa');
 const app = new Koa();
 
-app.use(async() => {
+app.use(async(ctx) => {
     ctx.body = 'hello koa2'
 })
 
