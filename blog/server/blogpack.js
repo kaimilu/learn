@@ -16,6 +16,27 @@ class blogpack {
         }
     }
 
+    async getMiddlewareRoutes(...args) {
+        // 所有具有mountingRoute 方法的plug: 
+        const plugins = this.plugins.filter(plugin => plugin['mountingRoute'])
+        const result = []
+            // 循环执行mountingRoute方法返回的结果push到result数组中去
+        for (const plugin of plugins) {
+            const routeObj = await plugin.mountingRoute()
+            result.push(Object.assign({}, routeObj, {
+                needBeforeRoutes: routeObj.needBeforeRoutes || false,
+                needAfterRoutes: routeObj.needAfterRoutes || false
+            }))
+        }
+        return result
+    }
+
+    getBeforeRestfulRoutes() {
+        return this.plugins
+            .filter(plugin => plugin['beforeRestful'])
+            .map(plugin => plugin['beforeRestful'])
+    }
+
 }
 
 module.exports = blogpack

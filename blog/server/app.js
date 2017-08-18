@@ -29,6 +29,9 @@ module.exports = (async() => {
             redis
         })
 
+        const beforeRestfulRoutes = laosu.getBeforeRestfulRoutes()
+        const middlewareRoutes = await laosu.getMiddlewareRoutes() // 登录，登出，七牛
+        console.log(beforeRestfulRoutes)
         app.use(router.routes())
 
 
