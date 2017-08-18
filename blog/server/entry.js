@@ -9,4 +9,3 @@ require('babel-register')({
 })
 
 require('./app.js')
-console.log(global.Promise)

@@ -12,15 +12,30 @@ const configName = process.env.NODE_ENV === '"development"' ? 'dev' : 'prod'
 const blogpackConfig = require(`./build/blogpack.${configName}.config`)
 blogpackConfig.models = models
 blogpackConfig.redis = redis
-const config = require('./conf/config')
+const Blogpack = require('./blogpack')
+const laosu = global.laosu = new Blogpack(blogpackConfig)
+console.log(configName)
 
 const app = new Koa()
 const router = koaRouter()
 
 module.exports = (async() => {
     try {
-        console.log('laosu')
-    } catch (err) {
+        await laosu.beforeUseRoutes({
+            config: laosu.config,
+            app,
+            router,
+            models,
+            redis
+        })
 
+        app.use(router.routes())
+
+
+        app.listen(config.serverPort, () => {
+            log.info(`Koa2 is running at ${config.serverPort}`)
+        })
+    } catch (err) {
+        log.error(err)
     }
-})
+})()

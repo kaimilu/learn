@@ -17,7 +17,11 @@
         "koa-bodyparser": "^3.2.0",
         "log4js": "^0.6.38",
         "mongoose": "^4.5.9",
-        "redis": "^2.6.2"
+        "redis": "^2.6.2",
+        "restc": "^0.0.4"
+    },
+    "devDependencies": {
+        "koa-ratelimit": "^4.0.0"
     },
     "author": "laosu",
     "license": "MIT"

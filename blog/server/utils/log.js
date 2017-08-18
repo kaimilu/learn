@@ -1,5 +1,5 @@
 const log4js = require('log4js')
-const config = require('../config/config')
+const config = require('../conf/config')
 let log = log4js.getLogger(config.mongoDatabase)
 const isTest = process.env.NODE_ENV === 'TEST'
 
