@@ -14,6 +14,14 @@ const RestcPlugin = require(`${useRoutesPrefix}/restc`)
 
 const CheckAuthPlugin = require('../plugins/beforeRestful/checkAuth')
 
+const LoginPlugin = require('../plugins/mountingRoute/login')
+const LogoutPlugin = require('../plugins/mountingRoute/logout')
+
+
+const InitOptionPlugin = require(`${serverStartPrefix}/initOption`)
+const InstallThemePlugin = require(`${serverStartPrefix}/installTheme`)
+const InitUserPlugin = require(`${serverStartPrefix}/initUser`)
+
 // 
 config.plugins.push(
     // beforeUseRoutes
@@ -23,7 +31,16 @@ config.plugins.push(
     new RestcPlugin(),
 
     // beforeRestful
-    new CheckAuthPlugin()
+    new CheckAuthPlugin(),
+
+    // moutingRoute
+    new LoginPlugin(),
+    new LogoutPlugin(),
+
+    // beforeServerStart
+    new InitUserPlugin(),
+    new InstallThemePlugin(),
+    new InitOptionPlugin()
 )
 
 module.exports = config

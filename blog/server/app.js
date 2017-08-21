@@ -14,7 +14,6 @@ blogpackConfig.models = models
 blogpackConfig.redis = redis
 const Blogpack = require('./blogpack')
 const laosu = global.laosu = new Blogpack(blogpackConfig)
-console.log(configName)
 
 const app = new Koa()
 const router = koaRouter()
@@ -30,10 +29,31 @@ module.exports = (async() => {
         })
 
         const beforeRestfulRoutes = laosu.getBeforeRestfulRoutes()
+        const afterRestfulRoutes = laosu.getAfterRestfulRoutes()
         const middlewareRoutes = await laosu.getMiddlewareRoutes() // 登录，登出，七牛
-        console.log(beforeRestfulRoutes)
+
+        for (const item of middlewareRoutes) {
+            const middlewares = [...item.middleware]
+            item.needBeforeRoutes && middlewares.unshift(...beforeRestfulRoutes)
+            item.needAfterRoutes && middlewares.push(...afterRestfulRoutes)
+            router[item.method](item.path, ...middlewares)
+        }
+
+        // Object.keys() 方法会返回一个由一个给定对象的自身可枚举属性组成的数组
+        Object.keys(models).map(name => models[name]).forEach(model => {
+            mongoRest(router, model, '/api', {
+                beforeRestfulRoutes,
+                afterRestfulRoutes
+            })
+        })
+
         app.use(router.routes())
 
+        const beforeServerStartArr = laosu.getBeforeServerStartFuncs()
+
+        for (const middleware of beforeServerStartArr) {
+            await middleware()
+        }
 
         app.listen(config.serverPort, () => {
             log.info(`Koa2 is running at ${config.serverPort}`)
