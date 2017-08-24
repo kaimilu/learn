@@ -50,7 +50,8 @@ Page({
             tags: "搜索",
             fail: that.fail,
             success: that.success,
-            location: "113.94763969118,22.546721293351",
+            location: "114.02597366,22.54605355",
+            // location: "113.94763969118,22.546721293351",
             geotable_id: "164969",
             curPage: that.data.curPage,
             radius: 2000000000

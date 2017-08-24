@@ -1,41 +1,28 @@
 var gulp = require('gulp');
-var sourcemaps = require('gulp-sourcemaps');
+var browserify = require('browserify');
+var babelify = require('babelify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
-var browserify = require('browserify');
-var watchify = require('watchify');
-var babel = require('babelify');
+var uglify = require('gulp-uglify');
+var sourcemaps = require('gulp-sourcemaps');
+var livereload = require('gulp-livereload');
 
+gulp.task('build', function() {
+  return browserify({ entries: './src/js/app.js', debug: true })
+    .transform("babelify", { presets: ["es2015"] })
+    .bundle()
+    .pipe(source('app.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init())
+    .pipe(uglify())
+    .pipe(sourcemaps.write('./maps'))
+    .pipe(gulp.dest('./dist/js'))
+    .pipe(livereload());
+});
 
-function compile(watch) {
-  var bundler = watchify(browserify('./src/index.js', { debug: true }).transform(babel));
+gulp.task('watch', ['build'], function() {
+  livereload.listen();
+  gulp.watch('./src/js/*.js', ['build']);
+});
 
-  function rebundle() {
-    bundler.bundle()
-      .on('error', function(err) { console.error(err);
-        this.emit('end'); })
-      .pipe(source('build.js'))
-      .pipe(buffer())
-      .pipe(sourcemaps.init({ loadMaps: true }))
-      .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest('./build'));
-  }
-
-  if (watch) {
-    bundler.on('update', function() {
-      console.log('-> bundling...');
-      rebundle();
-    });
-  }
-
-  rebundle();
-}
-
-function watch() {
-  return compile(true);
-};
-
-gulp.task('build', function() { return compile(); });
-gulp.task('watch', function() { return watch(); });
-
-gulp.task('default', ['watch']);
+gulp.task('default', ['build', 'watch']);
