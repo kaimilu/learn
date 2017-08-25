@@ -24,26 +24,24 @@
 <script>
   import Api from '../../store/api'
 
-  export default{
+  export default {
     name: 'login',
-    data(){
-      return{
-        title:'',
-        form:{
-          name:'',
-          password:''
+    data() {
+      return {
+        title: '',
+        form: {
+          name: '',
+          password: ''
         }
       }
     },
-    methods:{
-      onSubmit(){
-        Api.login(this.form).then(response=>{
-          
-        })
+    methods: {
+      onSubmit() {
+        Api.login(this.form).then(response => {})
       }
     }
   }
-</script>
+  </script>
 
 <style lang="scss" scoped>
 .login {
