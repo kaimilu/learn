@@ -37,7 +37,30 @@
     },
     methods: {
       onSubmit() {
-        Api.login(this.form).then(response => {})
+        Api.login(this.form).then(response => {
+          if (response.data.status === 'fail') {
+            this.$message({
+              message: '登陆失败，请检查帐号与密码',
+              duration: 2000,
+              type: 'error'
+            })
+          } else if (response.data.status === 'success') {
+            window.localStorage.setItem('token', response.data.token)
+            window.localStorage.setItem('username', this.form.name)
+            this.$message({
+              message: '登陆成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.$store.dispatch('FETCH_USER', {
+              model: 'user',
+              query: {},
+              username: this.form.name
+            }).then(() => {
+              this.$router.push({path: '/dashboard'})
+            })
+          }
+        }).catch(err => console.error(err))
       }
     }
   }
