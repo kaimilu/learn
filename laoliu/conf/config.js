@@ -1,5 +1,5 @@
 const env = process.env
 
 module.exports = {
-    serverPort: env.serverPort || 38888
+    serverPort: env.serverPort || 6888
 }
