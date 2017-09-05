@@ -8,6 +8,10 @@ import store from './store/index'
 
 sync(store, router)
 
+import 'element-ui/lib/theme-default/index.css'
+import Element from 'element-ui'
+Vue.use(Element)
+
 import App from './App'
 
 Vue.config.productionTip = false

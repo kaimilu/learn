@@ -19,5 +19,8 @@ export default new Router({
     components: {
       default: Login
     }
+  }, {
+    path: '/',
+    redirect: '/admin/login'
   }]
 })

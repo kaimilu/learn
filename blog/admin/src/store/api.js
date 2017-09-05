@@ -1,8 +1,7 @@
 import request from 'axios'
 
-// const root = `/proxyPrefix/api`
-
 const root = `/proxyPrefix/api`
+
 const store = {}
 
 export default store
