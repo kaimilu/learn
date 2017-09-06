@@ -4,7 +4,11 @@ Vue.use(Router)
 
 // import Hello from '@/components/Hello'
 
-import Login from '../components/pages/Login'
+import Login from '@/components/pages/Login'
+import Logout from '@/components/pages/Logout'
+
+import Main from '@/components/Main'
+import Dashboard from '@/components/pages/Dashboard'
 
 // 定义路由
 export default new Router({
@@ -20,7 +24,21 @@ export default new Router({
       default: Login
     }
   }, {
+    path: '/admin/logout',
+    name: 'logout',
+    component: {
+      default: Logout
+    }
+  }, {
     path: '/',
     redirect: '/admin/login'
+  }, {
+    path: '/dashboard',
+    component: Main,
+    children: [{
+      path: '/',
+      name: 'dashboard',
+      component: Dashboard
+    }]
   }]
 })

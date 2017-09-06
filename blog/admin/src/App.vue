@@ -6,7 +6,7 @@
 
 <script>
 import api from './store/api'
-import {getChineseDesc} from './utils/error'
+import { getChineseDesc } from './utils/error'
 
 export default {
   name: 'app',

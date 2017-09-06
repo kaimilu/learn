@@ -12,7 +12,17 @@ const store = new Vuex.Store({
   },
 
   actions: {
-
+    FETCH_USER: ({commit, state}, {model, query, username}) => {
+      return api.fetchList(model, query).then(result => {
+        for (let i = 0, len = result.length; i < len; i++) {
+          let user = result[i]
+          if (user.name === username) {
+            commit('SET_USER', {user})
+            break
+          }
+        }
+      })
+    },
     FETCH_OPTIONS: ({ commit, state }) => {
       return api.fetchList('option', {}).then(optionArr => {
         // reduce() 方法对累加器和数组中的每个元素 (从左到右)应用一个函数，

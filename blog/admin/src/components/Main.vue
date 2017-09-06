@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <top></top>
-    <sidebar></sidebar>
+    <!-- <sidebar></sidebar> -->
     <div class="main">
       <router-view :key="$route.params.id || -1"></router-view>
     </div>
@@ -9,7 +9,19 @@
 </template>
 
 <script>
+import Top from './pages/Top'
 
+export default {
+  name: 'dashboard',
+  data() {
+    return {
+      title: ''
+    }
+  },
+  components: {
+    Top
+  }
+}
 </script>
 
 <style lang="scss" scoped>

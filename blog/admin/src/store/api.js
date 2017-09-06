@@ -13,6 +13,7 @@ store.login = (conditions) => {
 }
 
 store.logout = (conditions) => {
+  console.log(conditions)
   return request.post(`/proxyPrefix/admin/logout`, conditions)
 }
 
