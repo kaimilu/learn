@@ -17,28 +17,35 @@ export default new Router({
   scrollBehavior: function(to, from, savedPosition) {
     return savedPosition || { x: 0, y: 0 }
   },
-  routes: [{
-    path: '/admin/login',
-    name: 'login',
-    components: {
-      default: Login
-    }
-  }, {
-    path: '/admin/logout',
-    name: 'logout',
-    component: {
-      default: Logout
-    }
-  }, {
-    path: '/',
-    redirect: '/admin/login'
-  }, {
-    path: '/dashboard',
-    component: Main,
-    children: [{
+  routes: [
+    {
+      path: '/admin/login',
+      name: 'login',
+      components: {
+        default: Login
+      }
+    },
+    {
+      path: '/admin/logout',
+      name: 'logout',
+      components: {
+        default: Logout
+      }
+    },
+    {
+      path: '/dashboard',
+      component: Main,
+      children: [
+        {
+          path: '/',
+          name: 'dashboard',
+          component: Dashboard
+        }
+      ]
+    },
+    {
       path: '/',
-      name: 'dashboard',
-      component: Dashboard
-    }]
-  }]
+      redirect: '/admin/login'
+    }
+  ]
 })

@@ -38,7 +38,7 @@ export default {
         // })
       } else if (index === '1-2') {
         this.$router.push({
-          name: 'login'
+          name: 'logout'
         })
       }
     }

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <keep-alive>
-      <router-view></router-view>
+        <router-view></router-view>
     </keep-alive>
   </div>
 </template>
@@ -20,7 +20,6 @@ export default {
       return this.$store.state.siteInfo
     }
   },
-  // 在挂载开始之前被调用
   beforeMount() {
     this.$store.dispatch('FETCH_OPTIONS').then(() => {
       if (this.siteInfo['title'] && typeof document !== 'undefined') {
@@ -30,10 +29,6 @@ export default {
 
     const { request } = api
 
-    /**
-    *  https://www.npmjs.com/package/axios
-    *  拦截请求
-     */
     request.interceptors.request.use((config) => {
       const token = window.localStorage.getItem('token')
 
@@ -44,10 +39,10 @@ export default {
       if (token !== null && typeof token !== 'undefined') {
         config.headers['authorization'] = token
       }
+
       return config
     }, (error) => Promise.reject(error))
 
-    // 拦截响应
     request.interceptors.response.use((response) => {
       if (this.$store.state.route.name === 'logout') {
         return response
@@ -63,7 +58,6 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 html, body {
   width: 100%;
@@ -75,4 +69,5 @@ html, body {
     height: 100%;
   }
 }
+
 </style>

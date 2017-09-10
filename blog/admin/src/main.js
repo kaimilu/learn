@@ -5,6 +5,7 @@ import Vue from 'vue'
 import router from './router'
 import { sync } from 'vuex-router-sync'
 import store from './store/index'
+// import VueProgressBar from 'vue-progressbar'
 
 sync(store, router)
 
