@@ -33,9 +33,9 @@ export default {
   methods: {
     handleSelect(index, indexPath) {
       if (index === '1-1') {
-        // this.$router.push({
-        //   name: 'userEdit'
-        // })
+        this.$router.push({
+          name: 'userEdit'
+        })
       } else if (index === '1-2') {
         this.$router.push({
           name: 'logout'
