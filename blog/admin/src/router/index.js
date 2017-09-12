@@ -51,7 +51,7 @@ export default new Router({
         {
           path: 'edit',
           name: 'userEdit',
-          component: createEditView({
+          component: createEditView({ // 动态创建修改用户信息组件
             name: 'user',
             model: 'user',
             isPlain: true,

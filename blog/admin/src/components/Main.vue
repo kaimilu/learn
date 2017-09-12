@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <top></top>
-    <!-- <sidebar></sidebar> -->
+    <sidebar></sidebar>
     <div class="main">
       <router-view :key="$route.params.id || -1"></router-view>
     </div>
@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import Sidebar from './pages/Sidebar'
 import Top from './pages/Top'
 
 export default {
@@ -19,6 +20,7 @@ export default {
     }
   },
   components: {
+    Sidebar,
     Top
   }
 }

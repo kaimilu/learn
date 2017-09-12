@@ -23,7 +23,7 @@ const blackModelArr = ['option', 'user']
 
 export default {
   name: 'list',
-  props: ['options'],
+  props: ['options'], // props 可以是数组或对象，用于接收来自父组件的数据
   data() {
     let isPost = this.options.name === 'post'
     let isPage = this.options.name === 'page'
@@ -46,6 +46,7 @@ export default {
   methods: {
     parseTypeBeforeSubmit() {
       let isOk = true
+      console.log(this.options.items)
       this.options.items.forEach(item => {
         try {
           if (item.sourceType === 'Object') {
@@ -100,6 +101,7 @@ export default {
             type: 'success'
           })
           let model = this.options.model
+          // 如果是user 和 option model 就不需要执行this.setParams 方法
           if (blackModelArr.indexOf(model) === -1) {
             this.setParams(response)
           }
