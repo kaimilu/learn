@@ -46,8 +46,8 @@ export default new Router({
       ]
     },
     {
-      path: 'list',
-      name: 'postList',
+      path: '/post',
+      name: 'post',
       component: Main,
       children: [
         {
@@ -184,6 +184,57 @@ export default new Router({
       ]
     },
     {
+      path: '/page',
+      name: 'page',
+      component: Main,
+      children: [
+        {
+          path: 'list',
+          name: 'pageList',
+          component: createListView({
+            name: 'page',
+            mode: 'post',
+            item: [
+              {
+                prop: 'title',
+                label: '标题',
+                width: 250
+              },
+              {
+                prop: 'pathName',
+                label: '路径',
+                width: 170
+              },
+              {
+                prop: 'createdAt',
+                label: '创建日期',
+                width: 170
+              },
+              {
+                prop: 'updatedAt',
+                label: '修改日期',
+                width: 170
+              }
+            ],
+            query: {
+              conditions: {
+                type: 'page'
+              },
+              select: {
+                title: 1,
+                pathName: 1,
+                createAt: 1,
+                updateAt: 1
+              },
+              sort: {
+                createAt: -1
+              }
+            }
+          })
+        }
+      ]
+    },
+    {
       path: '/user',
       name: 'user',
       component: Main,
@@ -221,6 +272,88 @@ export default new Router({
                 default: '',
                 width: 170,
                 description: '在文章被回复时博客需要通知的目标邮箱，空则不通知'
+              }
+            ],
+            query: {}
+          })
+        }
+      ]
+    },
+    {
+      path: '/option',
+      name: 'option',
+      component: Main,
+      children: [
+        {
+          path: 'general',
+          name: 'optionGeneral',
+          component: createEditView({
+            name: 'general',
+            model: 'option',
+            isPlain: true,
+            items: [
+              {
+                prop: 'title',
+                label: '网站名称',
+                default: '',
+                width: 250,
+                description: '网站的名称，作为前后台的标题'
+              },
+              {
+                prop: 'logoUrl',
+                label: 'logo地址',
+                default: '',
+                width: 170,
+                description: '前台单页的正方形图标，80x80'
+              },
+              {
+                prop: 'description',
+                label: '站点描述',
+                default: '',
+                width: 170,
+                description: '作为前台的侧边栏描述'
+              },
+              {
+                prop: 'siteUrl',
+                label: '网站地址',
+                default: '',
+                width: 170,
+                description: '博客前台的域名,建议加上http/https前缀'
+              },
+              {
+                prop: 'faviconUrl',
+                label: 'favicon地址',
+                default: '',
+                width: 170,
+                description: '博客前台的favicon地址，请填写相对前台域名的根路径'
+              },
+              {
+                prop: 'keywords',
+                label: '关键词',
+                default: '',
+                width: 170,
+                description: '作为前台单页的meta中的keywords，以供搜索引擎收录'
+              },
+              {
+                prop: 'githubUrl',
+                label: 'github地址',
+                default: '',
+                width: 170,
+                description: 'github地址，填写用户昵称即可'
+              },
+              {
+                prop: 'weiboUrl',
+                label: '微博地址',
+                default: '',
+                width: 170,
+                description: '微博地址，请填写全部链接,包括http/https前缀'
+              },
+              {
+                prop: 'miitbeian',
+                label: '网站备案号',
+                default: '',
+                width: 170,
+                description: '网站的备案号，在前台单页的底部显示'
               }
             ],
             query: {}

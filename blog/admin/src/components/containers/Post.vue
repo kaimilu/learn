@@ -54,7 +54,9 @@
 </template>
 
 <script>
-// import moment from 'moment'
+import Markdown from './Markdown'
+import { marked, toc } from '../utils/marked'
+import moment from 'moment'
 
 export default {
   name: 'post',

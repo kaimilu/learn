@@ -92,6 +92,7 @@ const store = new Vuex.Store({
       return api.patchByID(model, id, form)
     },
 
+    // 根据id删除对应数据
     DELETE: ({ commit, state }, { model, id }) => {
       return api.deleteByID(model, id)
     },

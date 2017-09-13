@@ -88,6 +88,28 @@ export default {
         return obj[value]
       })
     }
+  },
+  methods: {
+    filtersTag(value, row) {
+      return row.tags.indexOf(value) !== -1
+    },
+    handleClick({_id}) {
+      this.$router.push({
+        path: `/${this.options.name}/create/${_id}`
+      })
+    },
+    handleDelete({_id}, index) {
+      this.$store.dispatch('DELETE', Object.assign({}, {
+        id: _id
+      }, this.options)).then(() => {
+        this.$store.state.list.splice(index, 1) // 从state状态删除当条数据记录的状态
+      }).catch(err => console.error(err))
+    }
+  },
+  created() {
+    this.$store.dispatch('FETCH_LIST', this.options).then(() => {
+      this.isLoading = false
+    }).catch(err => console.error(err))
   }
 }
 </script>

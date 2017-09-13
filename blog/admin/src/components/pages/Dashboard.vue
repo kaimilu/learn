@@ -61,7 +61,7 @@ export default {
     }
   },
   methods: {
-    handleNodeChick(data, node, tree) {
+    handleNodeClick(data, node, tree) {
       if (data.title !== '最近发布的文章') {
         this.$router.push({
           name: data.type === 'post' ? 'postCreate' : 'pageCreate',
@@ -79,7 +79,7 @@ export default {
           type: 1
         },
         sort: {
-          createAt: -1
+          createdAt: -1
         },
         limit: 10
       }
