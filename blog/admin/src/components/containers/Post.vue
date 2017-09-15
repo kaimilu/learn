@@ -61,6 +61,9 @@ import moment from 'moment'
 export default {
   name: 'post',
   props: ['options'],
+  components: {
+    Markdown
+  },
   data() {
     let isPost = this.options.name === 'post'
     let isPage = this.options.name === 'page'
@@ -122,8 +125,133 @@ export default {
       }
     }
   },
-  methods: {},
-  created() {}
+  methods: {
+    jump(type) {
+      if (this.id === -1) return
+
+      let key = type === 'prev' ? '$lt' : '$gt'
+      let query = Object.assign({}, this.options.query)
+      query.conditions['_id'] = { [key]: this.form._id }
+      query.limit = 1
+      if (type === 'prev') {
+        query.sort = 1
+      }
+      this.$store.dispatch('FETCH', {
+        model: this.options.model,
+        query
+      }).then(item => {
+        if (item.length !== 0) {
+          let id = item[0]._id
+          this.$router.push({params: { id }})
+          this.id = id
+        }
+      })
+    },
+    restore(key, val) {
+      this.$confirm('', '发现草稿, 是否恢复?', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        closeOnClickModal: false
+      }).then(() => {
+        this.form.markdownContent = val
+        this.$message({
+          type: 'success',
+          message: '已恢复草稿'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消恢复，提交文章后将清理草稿'
+        })
+      })
+    },
+    saveLS(key, value) {
+      window.localStorage.setItem(key, value)
+    },
+    getLS(key) {
+      return window.localStorage.getItem(key)
+    },
+    onSaveToc() {
+      toc.length = 0
+      marked(this.form.markdownContent)
+      let tocMarkdown = this.tocToTree(toc)
+      this.form.markdownToc = '**文章目录**\n' + tocMarkdown
+    },
+    tocToTree(toc) {
+      return toc.map(item => {
+        let times = (item.level - 1) * 2
+        return `${' '.repeat(times)} - [${item.title}(#${item.slug})`
+      }).join('\n')
+    },
+    validate() {
+      this.form.summary = marked(this.form.markdownContent.split('<!--more-->')[0])
+      this.form.content = marked(this.form.markdownContent.replace(/<!--more-->/g, ''))
+      this.form.markdownToc = this.form.markdownToc || ''
+      this.form.toc = marked(this.form.markdownToc)
+      if (this.form.createdAt === '') {
+        this.form.createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
+      } else {
+        this.form.createdAt = moment(this.form.createdAt).format('YYYY-MM-DD HH:mm:ss')
+      }
+      this.form.updatedAt = moment().formart('YYYY-MM-DD HH:mm:ss')
+    },
+    onSubmit() {
+      this.validate()
+      this.$store.dispatch('POST', {
+        model: this.options.model,
+        form: this.form
+      }).then(response => {
+        const url = this.$store.state.siteInfo.siteUrl.value
+        const path = this.form.pathName
+        const timestamp = new Date(this.form.updatedAt).valueOf()
+        const key = `${url}|${path}`
+        this.saveLS(key, this.form.markdownContent + `|${timestamp}`)
+        this.$message({
+          message: '文章已成功提交',
+          type: 'success'
+        })
+        if (response._id && this.id === -1) {
+          this.$router.replace({ params: {id: response._id} })
+          this.form = response
+          this.id = response._id
+        }
+      }).catch(err => console.error(err))
+    },
+    handleAddTag(tag) {
+      this.form.tags.indexOf(tag) === -1 && this.form.tags.push(tag)
+    },
+    handleDelete(index) {
+      this.form.tags.splice(index, 1)
+    }
+  },
+  created() {
+    if (this.id !== -1) {
+      this.$store.dispatch('FETCH_BY_ID', Object.assign({}, {
+        id: this.id
+      }, this.options)).then(post => {
+        this.isLoading = false
+        post.type = this.options.name
+        this.form = post
+      })
+    }
+
+    if (this.isPage) return
+
+    let fetchCate = this.$store.dispatch('FETCH', {
+      model: 'category',
+      query: {}
+    })
+
+    let fetchTag = this.$store.dispatch('FETCH', {
+      model: 'tag',
+      query: {}
+    })
+
+    Promise.all([fetchCate, fetchTag]).then(([cates, tags]) => {
+      this.cates = cates.map(value => value.name)
+      this.tags = tags.map(value => value.name)
+    }).catch(err => console.error(err))
+  }
 }
 </script>
 

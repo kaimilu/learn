@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import _ from 'lodsh'
+import _ from 'lodash'
 import { marked } from '../utils/marked'
 import moment from 'moment'
 
@@ -65,7 +65,7 @@ export default {
         'split': '分屏模式',
         'preview': '预览模式',
         'full': '全屏模式',
-        'toc' : 'TOC模式'
+        'toc': 'TOC模式'
       },
       mode: 'edit', // ['edit', 'split', 'preview', 'toc']
       isUploadShow: false,
@@ -85,7 +85,7 @@ export default {
     handleSelect(key, keyPath) {
       if (keyPath.length === 1) {
         switch (key) {
-          case '1': 
+          case '1':
             this._blodText()
             break
           case '2':
@@ -101,11 +101,11 @@ export default {
             this._insertMore()
             break
           case '8':
-            this.mode='toc'
+            this.mode = 'toc'
             break
         }
       } else if (keyPath.length === 2) {
-        switch  (key) {
+        switch (key) {
           case '5-1':
             this._uploadImage()
             break
@@ -117,6 +117,7 @@ export default {
             break
           case '7-2':
             this.mode = 'split'
+            break
           case '7-3':
             this.mode = 'preview'
             break
@@ -133,7 +134,119 @@ export default {
     handleInput: _.debounce(function(e) {
       let value = e.target.value
       this.$emit('change', value)
-    }, 300)
+    }, 300),
+    handleTocInput: _.debounce(function(e) {
+      let value = e.target.value
+      this.$emit('chang', value)
+    }, 300),
+    _preInputText(text, preStart, preEnd) {
+      let textControl = this.$refs.markdown
+      const start = textControl.selectionStart
+      const end = textControl.selectionEnd
+      const origin = this.value
+
+      if (start !== end) {
+        const exist = origin.slice(start, end)
+        text = text.slice(0, preStart) + exist + text.slice(preEnd)
+        preEnd = preStart + exist.length
+      }
+      let input = origin.slice(0, start) + text + origin.slice(end)
+      this.$emit('input', input)
+    },
+    handlePreview(file) {},
+    handleSuccess(response, file, fileList) {
+      let key = response.key
+      let prefix = this.supportWebp ? 'webp/' : ''
+      const preUrl = `${this.bucketHost}/${encodeURI(key)}`
+      const url = `${this.bucketHost}/${prefix}${encodeURI(key)}`
+      this.$store.dispatch('GET_IMAGE_HEIGHT', {
+        url: preUrl
+      }).then(height => {
+        const target = `<img height='${height}' src='${url}'>`
+        this.$confirm(target, '上传成功，是否插入图片链接?', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          closeOnClickModal: false
+        }).then(() => {
+          this.isUploadShow = false
+          this._preInputText(target, 12, 12)
+          this.$message({
+            type: 'success',
+            message: '已插入图片链接'
+          })
+        }).catch(() => {
+          this.isUploadShow = false
+          this.$message({
+            type: 'info',
+            message: '已取消插入图片链接'
+          })
+        })
+      })
+    },
+    handleError(err, response, file) {
+      if (err.status === 401) {
+        this.$message.error('图片上传失败，请求中未附带Token')
+      } else {
+        this.$message.error(JSON.stringify(err))
+      }
+    },
+    beforeUpload(file) {
+      let curr = moment().formart('YYYYMMDD').toString()
+      let prefix = moment(file.lastModified).format('HHmmss').toString()
+      let suffix = file.name
+      let key = encodeURI(`${curr}/${prefix}_${suffix}`)
+      return this.$store.dispatch('GET_IMAGE_TOKEN', {
+        key
+      }).then(response => {
+        this.upToken = response.upToken
+        this.key = response.key
+        this.bucketHost = response.bucketHost
+        this.supportWebp = response.supportWebp
+        if (this.bucketHost === '') {
+          this.$notify.error('获取七牛Token失败，请确认您已修改后台服务器的七牛配置文件(server/conf/config.js)')
+          return Promise.reject()
+        }
+        this.form = {
+          key,
+          token: this.upToken
+        }
+      })
+    },
+    _uploadImage() {
+      this.isUploadShow = true
+    },
+    _importImage() {
+      this.$prompt('请输入图片的链接', '导入图片链接', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({ value }) => {
+        this._preInputText(`![](${value})`, 12, 12)
+        this.$message({
+          type: 'success',
+          message: '已插入图片链接'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消插入图片链接'
+        })
+      })
+    },
+    _insertMore() {
+      this._preInputText('<!--more-->', 12, 12)
+    },
+    _boldText() {
+      this._preInputText('**加粗文字**', 2, 6)
+    },
+    _italicText() {
+      this._preInputText('_斜体文字_', 1, 5)
+    },
+    _blockquoteText() {
+      this._preInputText('> 引用', 3, 5)
+    },
+    _codeText() {
+      this._preInputText('```\ncode block\n```', 5, 15)
+    }
   }
 }
 
