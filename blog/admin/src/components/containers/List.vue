@@ -90,7 +90,7 @@ export default {
     }
   },
   methods: {
-    filtersTag(value, row) {
+    filterTag(value, row) {
       return row.tags.indexOf(value) !== -1
     },
     handleClick({_id}) {
